@@ -1,0 +1,36 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="AndroidLintAlwaysShowAction" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintCommitPrefEdits" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintDefaultLocale" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintDisableBaselineAlignment" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintExportedReceiver" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintExtraText" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintHardcodedText" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintIconLauncherShape" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintIconXmlAndPng" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintInconsistentLayout" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintInefficientWeight" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintInflateParams" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintInnerclassSeparator" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintMergeRootFrame" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintNestedWeights" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintObsoleteLayoutParam" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintParcelCreator" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintPrivateResource" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintRelativeOverlap" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintRtlHardcoded" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintRtlSymmetry" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintScrollViewSize" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintSetTextI18n" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintSimpleDateFormat" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintSmallSp" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintUnknownIdInLayout" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintUnusedAttribute" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintUseSparseArrays" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintUselessParent" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintViewConstructor" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintViewHolder" enabled="true" level="ERROR" enabled_by_default="true" />
+  </profile>
+</component>
