@@ -11,8 +11,8 @@ Super-WIP app for controlling Home Assistant using the upcoming [Android 11 Quic
 - Supported device types:
     - Light
     - Switch
-    - Vacuum
-    - Camera
+    - Vacuum (no interaction, just displays state)
+    - Camera (no interaction, just displays state)
 - Control devices via single tap and slider
 
 ### TO-DO:
