@@ -13,12 +13,7 @@ fun HassState.toHassControl(): HassControl {
         EntityType.SWITCH -> toSwitch()
         EntityType.CAMERA -> toCamera()
         EntityType.VACUUM -> toVacuum()
-        else -> object : HassControl {
-            override val entityId = entity_id
-            override val isAvailable = true
-            override val name = entity_id
-            override val status = state
-        }
+        else -> throw IllegalArgumentException("Unsupported entity type: $entityType")
     }
 }
 

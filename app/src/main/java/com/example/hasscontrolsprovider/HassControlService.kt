@@ -1,7 +1,5 @@
 package com.example.hasscontrolsprovider
 
-import android.app.PendingIntent
-import android.content.Intent
 import android.os.Build
 import android.service.controls.Control
 import android.service.controls.ControlsProviderService
@@ -35,21 +33,12 @@ class HassControlService : ControlsProviderService() {
     private val hassWebSocketClient = Dependencies.hassWebSocketClient
     private val compositeDisposable = CompositeDisposable()
 
-    companion object {
-        const val REQUEST_CODE = 100
-
+    private companion object {
         val FILTERED_TYPES =
             setOf(EntityType.LIGHT, EntityType.VACUUM, EntityType.SWITCH, EntityType.CAMERA)
     }
 
     override fun createPublisherForAllAvailable(): Flow.Publisher<Control> {
-        val pendingIntent = PendingIntent.getActivity(
-            baseContext,
-            REQUEST_CODE,
-            Intent(),
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
         val controlStream: Flowable<Control> = hassRestService.getStates()
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
@@ -57,7 +46,7 @@ class HassControlService : ControlsProviderService() {
             .toObservable()
             .flatMapIterable { it } // List of controls -> stream of controls
             .filter { FILTERED_TYPES.contains(it.entityType) }
-            .map { it.toHassControl().toStatelessControl(pendingIntent) }
+            .map { it.toHassControl().toStatelessControl(this) }
             .toFlowable(BackpressureStrategy.BUFFER)
 
         return FlowAdapters.toFlowPublisher(controlStream)
@@ -67,13 +56,6 @@ class HassControlService : ControlsProviderService() {
         // TODO: in case of error, return a Control with Status.ERROR or something similar
         // TODO: when a requested control is not in the response, return a Control with Status.UNAVAILABLE
 
-        val pendingIntent = PendingIntent.getActivity(
-            baseContext,
-            REQUEST_CODE,
-            Intent(baseContext, MainActivity::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
         val controlStream: Flowable<Control> = hassRestService.getStates()
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
@@ -82,7 +64,7 @@ class HassControlService : ControlsProviderService() {
             .flatMapIterable { it } // List of controls -> stream of controls
             .mergeWith(hassWebSocketClient.stateUpdateSubject)
             .filter { controlIds.contains(it.entity_id) }
-            .map { it.toHassControl().toStatefulControl(pendingIntent, this) }
+            .map { it.toHassControl().toStatefulControl(this) }
             .toFlowable(BackpressureStrategy.BUFFER)
 
         hassWebSocketClient.connect()
