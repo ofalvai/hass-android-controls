@@ -1,5 +1,8 @@
 package com.example.hasscontrolsprovider.network.response
 
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class HassState(
     val entity_id: String,
     val state: String,
@@ -12,6 +15,7 @@ data class HassState(
         const val STATE_UNAVAILABLE = "unavailable"
     }
 
+    @JsonClass(generateAdapter = true)
     data class Attributes(
         val friendly_name: String?,
         val brightness: Int?,

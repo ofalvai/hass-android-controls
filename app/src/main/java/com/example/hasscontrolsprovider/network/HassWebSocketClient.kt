@@ -31,6 +31,7 @@ class HassWebSocketClient(
         COMMAND_PHASE,
     }
 
+    // TODO: emit errors too
     val stateUpdateSubject = PublishSubject.create<HassState>()
 
     private var webSocket: WebSocket? = null
@@ -68,7 +69,7 @@ class HassWebSocketClient(
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
         state = State.CLOSING
-        Timber.e("WebSocket onCLosing: code=$code, reason=$reason")
+        Timber.e("WebSocket onClosing: code=$code, reason=$reason")
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
