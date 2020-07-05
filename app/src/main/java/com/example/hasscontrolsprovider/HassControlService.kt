@@ -14,6 +14,7 @@ import com.example.hasscontrolsprovider.network.request.BrightnessRequest
 import com.example.hasscontrolsprovider.network.request.TurnOffRequest
 import com.example.hasscontrolsprovider.network.request.TurnOnRequest
 import com.example.hasscontrolsprovider.network.response.EntityType
+import com.example.hasscontrolsprovider.network.response.HassState
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import io.reactivex.Flowable
@@ -54,14 +55,19 @@ class HassControlService : ControlsProviderService() {
 
     override fun createPublisherFor(controlIds: MutableList<String>): Flow.Publisher<Control> {
         // TODO: in case of error, return a Control with Status.ERROR or something similar
-        // TODO: when a requested control is not in the response, return a Control with Status.UNAVAILABLE
 
         val controlStream: Flowable<Control> = hassRestService.getStates()
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError { Timber.e(it.toString()) }
             .toObservable()
-            .flatMapIterable { it } // List of controls -> stream of controls
+            .flatMapIterable {
+                // List of controls -> stream of controls + any requested control missing from response
+                val hassIds = it.map { state -> state.entity_id }
+                val missingIds = controlIds.toSet().minus(hassIds.toSet())
+                val unavailableStates = missingIds.map { id -> HassState.notFoundState(id) }
+                it + unavailableStates
+            }
             .mergeWith(hassWebSocketClient.stateUpdateSubject)
             .filter { controlIds.contains(it.entity_id) }
             .map { it.toHassControl().toStatefulControl(this) }

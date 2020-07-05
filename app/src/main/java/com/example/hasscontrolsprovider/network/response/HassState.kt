@@ -13,6 +13,13 @@ data class HassState(
         const val STATE_ON = "on"
         const val STATE_OFF = "off"
         const val STATE_UNAVAILABLE = "unavailable"
+        const val STATE_NOT_FOUND = "not_found" // Used for leftover UI controls
+
+        fun notFoundState(id: String) = HassState(
+            id,
+            STATE_NOT_FOUND,
+            Attributes(null, null, null, null, null)
+        )
     }
 
     @JsonClass(generateAdapter = true)

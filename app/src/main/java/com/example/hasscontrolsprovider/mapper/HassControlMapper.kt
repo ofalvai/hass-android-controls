@@ -63,7 +63,7 @@ fun HassControl.toStatefulControl(context: Context): Control {
         .setTitle(name)
         .setSubtitle(toSubtitle(context))
         .setStatusText(status.capitalize(Locale.getDefault()))
-        .setStatus(if (isAvailable) Control.STATUS_OK else Control.STATUS_ERROR)
+        .setStatus(availability.toStatus())
         .setDeviceType(toDeviceType())
         .setControlTemplate(controlTemplate)
         //.setCustomColor() // TODO
@@ -89,6 +89,15 @@ private fun HassControl.toSubtitle(context: Context): String {
             }
         }
         else -> ""
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.R)
+private fun Availability.toStatus(): Int {
+    return when (this) {
+        Availability.AVAILABLE -> Control.STATUS_OK
+        Availability.UNAVAILABLE -> Control.STATUS_ERROR
+        Availability.NOT_FOUND -> Control.STATUS_NOT_FOUND
     }
 }
 

@@ -20,7 +20,7 @@ fun HassState.toHassControl(): HassControl {
 private fun HassState.toLight(): HassLight {
     return HassLight(
         entityId = entity_id,
-        isAvailable = state != HassState.STATE_UNAVAILABLE,
+        availability = parseAvailability(this),
         name = attributes.friendly_name ?: entity_id,
         status = state,
         state = state == HassState.STATE_ON,
@@ -33,7 +33,7 @@ private fun HassState.toLight(): HassLight {
 private fun HassState.toSwitch(): HassSwitch {
     return HassSwitch(
         entityId = entity_id,
-        isAvailable = state != HassState.STATE_UNAVAILABLE,
+        availability = parseAvailability(this),
         name = attributes.friendly_name ?: entity_id,
         status = state,
         enabled = state == HassState.STATE_ON
@@ -43,7 +43,7 @@ private fun HassState.toSwitch(): HassSwitch {
 private fun HassState.toCamera(): HassCamera {
     return HassCamera(
         entityId = entity_id,
-        isAvailable = state != HassState.STATE_UNAVAILABLE,
+        availability = parseAvailability(this),
         name = attributes.friendly_name ?: entity_id,
         status = state
     )
@@ -52,7 +52,7 @@ private fun HassState.toCamera(): HassCamera {
 private fun HassState.toVacuum(): HassVacuum {
     return HassVacuum(
         entityId = entity_id,
-        isAvailable = state != HassState.STATE_UNAVAILABLE,
+        availability = parseAvailability(this),
         name = attributes.friendly_name ?: entity_id,
         status = state,
         features = parseSupportedVacuumFeatures(this),
@@ -89,4 +89,10 @@ private fun parseSupportedVacuumFeatures(hassState: HassState): Set<VacuumFeatur
     }
 
     return features
+}
+
+private fun parseAvailability(hassState: HassState) = when (hassState.state) {
+    HassState.STATE_NOT_FOUND -> Availability.NOT_FOUND
+    HassState.STATE_UNAVAILABLE -> Availability.UNAVAILABLE
+    else -> Availability.AVAILABLE
 }

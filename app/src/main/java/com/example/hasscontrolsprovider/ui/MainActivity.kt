@@ -11,6 +11,7 @@ import androidx.ui.layout.padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
+import com.example.hasscontrolsprovider.entity.Availability
 import com.example.hasscontrolsprovider.entity.HassControl
 import com.example.hasscontrolsprovider.mapper.PendingIntentConstants
 
@@ -20,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         val hassControl = object : HassControl {
             override val entityId = intent.getStringExtra(PendingIntentConstants.EXTRA_ENTITY_ID)!!
-            override val isAvailable = true
+            override val availability = Availability.AVAILABLE
             override val name = intent.getStringExtra(PendingIntentConstants.EXTRA_NAME)!!
             override val status = intent.getStringExtra(PendingIntentConstants.EXTRA_STATUS)!!
         }
@@ -46,7 +47,7 @@ fun Entity(hassControl: HassControl) {
 fun PreviewEntity() {
     val hassControl = object : HassControl {
         override val entityId = "light.living_room"
-        override val isAvailable = true
+        override val availability = Availability.AVAILABLE
         override val name = "Living room light"
         override val status = "OFF"
     }

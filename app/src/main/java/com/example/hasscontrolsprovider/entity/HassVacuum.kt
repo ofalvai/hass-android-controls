@@ -2,7 +2,7 @@ package com.example.hasscontrolsprovider.entity
 
 data class HassVacuum(
     override val entityId: String,
-    override val isAvailable: Boolean,
+    override val availability: Availability,
     override val name: String,
     override val status: String,
     val features: Set<VacuumFeatures>,
