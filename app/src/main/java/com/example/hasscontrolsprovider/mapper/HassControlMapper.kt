@@ -106,6 +106,7 @@ private fun createPendingIntent(hassControl: HassControl, context: Context): Pen
         putExtra(PendingIntentConstants.EXTRA_ENTITY_ID, hassControl.entityId)
         putExtra(PendingIntentConstants.EXTRA_NAME, hassControl.name)
         putExtra(PendingIntentConstants.EXTRA_STATUS, hassControl.status)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Tapping on the fullscreen icon crashes without this
     }
 
     return PendingIntent.getActivity(
