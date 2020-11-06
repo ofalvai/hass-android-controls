@@ -1,12 +1,14 @@
 package com.example.hasscontrolsprovider.network.response
 
 import com.squareup.moshi.JsonClass
+import java.time.ZonedDateTime
 
 @JsonClass(generateAdapter = true)
 data class HassState(
     val entity_id: String,
     val state: String,
-    val attributes: Attributes
+    val attributes: Attributes,
+    val last_changed: ZonedDateTime?
 ) {
 
     companion object {
@@ -18,7 +20,8 @@ data class HassState(
         fun notFoundState(id: String) = HassState(
             id,
             STATE_NOT_FOUND,
-            Attributes(null, null, null, null, null)
+            Attributes(null, null, null, null, null),
+            null
         )
     }
 
@@ -59,7 +62,7 @@ private fun String.toEntityType(): EntityType {
         startsWith("light.") -> EntityType.LIGHT
         startsWith("camera.") -> EntityType.CAMERA
         startsWith("vacuum.") -> EntityType.VACUUM
-        startsWith("switch") -> EntityType.SWITCH
+        startsWith("switch.") -> EntityType.SWITCH
         else -> EntityType.UNKNOWN
     }
 }

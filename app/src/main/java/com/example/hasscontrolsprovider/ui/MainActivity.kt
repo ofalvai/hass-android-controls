@@ -1,6 +1,7 @@
 package com.example.hasscontrolsprovider.ui
 
 import android.os.Bundle
+import android.text.format.DateUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
@@ -22,6 +23,7 @@ import androidx.ui.tooling.preview.Preview
 import com.example.hasscontrolsprovider.R
 import com.example.hasscontrolsprovider.entity.*
 import com.example.hasscontrolsprovider.mapper.PendingIntentConstants
+import java.time.ZonedDateTime
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
             override val availability = Availability.AVAILABLE
             override val name = intent.getStringExtra(PendingIntentConstants.EXTRA_NAME) ?: ""
             override val status = intent.getStringExtra(PendingIntentConstants.EXTRA_STATUS) ?: ""
+            override val lastChanged: ZonedDateTime = ZonedDateTime.now() // TODO
         }
 
         val hassControlLiveData: LiveData<HassControl> = MutableLiveData(hassControl)
@@ -149,10 +152,13 @@ fun EntityInfo(hassControl: LiveData<HassControl>,
                     text = controlState.value?.name ?: "",
                     style = MaterialTheme.typography.subtitle1
                 )
-                Text(
-                    text = "23 minutes ago", // TODO
-                    style = MaterialTheme.typography.subtitle1
-                )
+                val relativeLastChanged = controlState.value?.lastChanged?.toRelativeTimestamp()
+                relativeLastChanged?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.subtitle1
+                    )
+                }
             }
         }
         currentStateContent()
@@ -175,6 +181,7 @@ fun PreviewLightEntity() {
         availability = Availability.AVAILABLE,
         name = "Living Room",
         state = true,
+        lastChanged = ZonedDateTime.now().minusMinutes(6),
         status = "on",
         features = setOf(LightFeatures.BRIGHTNESS, LightFeatures.COLOR_TEMP),
         brightness = 50,
@@ -193,6 +200,7 @@ fun PreviewSwitchEntity() {
         availability = Availability.AVAILABLE,
         name = "Zigbee2MQTT permit join",
         status = "on",
+        lastChanged = ZonedDateTime.now().minusMinutes(8),
         enabled = false
     )
     HassTheme {
@@ -208,6 +216,7 @@ fun PreviewSensorEntity() {
         override val availability =Availability.AVAILABLE
         override val name = "Temperature"
         override val status = "22.81 °C"
+        override val lastChanged = ZonedDateTime.now().minusHours(1)
 
     }
     HassTheme {
@@ -220,4 +229,12 @@ fun HassTheme(content: @Composable () -> Unit) {
     MaterialTheme(colors = colorPalette) {
         content()
     }
+}
+
+private fun ZonedDateTime.toRelativeTimestamp(): String {
+    return DateUtils.getRelativeTimeSpanString(
+        this.toEpochSecond() * 1000,
+        System.currentTimeMillis(),
+        DateUtils.SECOND_IN_MILLIS
+    ).toString()
 }

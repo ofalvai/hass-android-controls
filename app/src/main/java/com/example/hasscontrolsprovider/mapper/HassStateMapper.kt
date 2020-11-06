@@ -23,6 +23,7 @@ private fun HassState.toLight(): HassLight {
         availability = parseAvailability(this),
         name = attributes.friendly_name ?: entity_id,
         status = state,
+        lastChanged = last_changed,
         state = state == HassState.STATE_ON,
         features = parseSupportedLightFeatures(this),
         brightness = attributes.brightness ?: 0,
@@ -36,6 +37,7 @@ private fun HassState.toSwitch(): HassSwitch {
         availability = parseAvailability(this),
         name = attributes.friendly_name ?: entity_id,
         status = state,
+        lastChanged = last_changed,
         enabled = state == HassState.STATE_ON
     )
 }
@@ -45,7 +47,8 @@ private fun HassState.toCamera(): HassCamera {
         entityId = entity_id,
         availability = parseAvailability(this),
         name = attributes.friendly_name ?: entity_id,
-        status = state
+        status = state,
+        lastChanged = last_changed
     )
 }
 
@@ -55,6 +58,7 @@ private fun HassState.toVacuum(): HassVacuum {
         availability = parseAvailability(this),
         name = attributes.friendly_name ?: entity_id,
         status = state,
+        lastChanged = last_changed,
         features = parseSupportedVacuumFeatures(this),
         batteryPercent = attributes.battery_level?.roundToInt() ?: 0
     )

@@ -1,5 +1,6 @@
 package com.example.hasscontrolsprovider
 
+import com.example.hasscontrolsprovider.mapper.MoshiDateAdapter
 import com.example.hasscontrolsprovider.network.HassRestService
 import com.example.hasscontrolsprovider.network.HassWebSocketClient
 import com.squareup.moshi.Moshi
@@ -12,7 +13,9 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 object Dependencies {
 
-    private val moshi = Moshi.Builder().build()
+    private val moshi = Moshi.Builder()
+        .add(MoshiDateAdapter())
+        .build()
 
     private val authInterceptor = Interceptor { chain ->
         val newRequest = chain.request().newBuilder()
