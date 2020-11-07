@@ -3,7 +3,7 @@ package com.example.hasscontrolsprovider.entity
 import java.time.ZonedDateTime
 
 
-class HassSwitch(
+data class HassSwitch(
     override val entityId: String,
     override val availability: Availability,
     override val name: String,

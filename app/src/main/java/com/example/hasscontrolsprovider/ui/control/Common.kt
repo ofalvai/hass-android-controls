@@ -1,6 +1,7 @@
 package com.example.hasscontrolsprovider.ui.control
 
 import android.text.format.DateUtils
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -13,11 +14,16 @@ import androidx.compose.ui.unit.dp
 import com.example.hasscontrolsprovider.R
 import com.example.hasscontrolsprovider.entity.Availability
 import com.example.hasscontrolsprovider.entity.HassControl
+import com.example.hasscontrolsprovider.entity.HassLight
+import com.example.hasscontrolsprovider.entity.HassSwitch
 import java.time.ZonedDateTime
 
 @Composable
 fun EntityAttribute(name: String, value: String) {
-    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         Text(text = "$name: ", style = MaterialTheme.typography.body1)
         Text(text = value, style = MaterialTheme.typography.body1)
     }
@@ -37,7 +43,7 @@ fun EntityInfo(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            Icon(vectorResource(R.drawable.ic_lightbulb))
+            Icon(vectorResource(hassControl.toIconRes()))
             Column(modifier = Modifier.padding(start = 16.dp)) {
                 Text(
                     text = hassControl.name,
@@ -53,6 +59,15 @@ fun EntityInfo(
             }
         }
         currentStateContent()
+    }
+}
+
+@DrawableRes
+private fun HassControl.toIconRes(): Int {
+    return when (this) {
+        is HassLight -> R.drawable.ic_lightbulb
+        is HassSwitch -> R.drawable.ic_switch
+        else -> R.drawable.ic_default_entity_icon
     }
 }
 

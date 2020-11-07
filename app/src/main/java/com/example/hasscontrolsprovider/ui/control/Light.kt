@@ -26,7 +26,7 @@ import java.time.ZonedDateTime
 import kotlin.math.roundToInt
 
 @Composable
-fun Light(
+fun LightControl(
     control: LiveData<HassLight>,
     onToggle: (Boolean) -> Unit,
     onBrightnessChange: (Float) -> Unit,
@@ -94,7 +94,7 @@ private fun LabeledSlider(
 
 @Preview(widthDp = 300, showBackground = true)
 @Composable
-private fun PreviewLightEntity() {
+private fun PreviewLightControl() {
     val light = HassLight(
         entityId = "light.living_room",
         availability = Availability.AVAILABLE,
@@ -111,7 +111,7 @@ private fun PreviewLightEntity() {
     val liveData = MutableLiveData(light)
 
     HassTheme {
-        Light(
+        LightControl(
             liveData,
             onToggle = { liveData.value = liveData.value!!.copy(state = it) },
             onBrightnessChange = {
