@@ -13,8 +13,12 @@ data class HassLight(
     val brightness: Int,
     val colorTemp: Int
 ) : HassControl {
+
     val brightnessPercent: Float
         get() = brightness / 255f * 100
+
+    val colorTempPercent: Float
+        get() = colorTemp / 255f * 100
 }
 
 enum class LightFeatures {
