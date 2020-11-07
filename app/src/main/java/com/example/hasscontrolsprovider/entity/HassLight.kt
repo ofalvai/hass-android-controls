@@ -8,17 +8,39 @@ data class HassLight(
     override val name: String,
     override val status: String,
     override val lastChanged: ZonedDateTime?,
+
     val state: Boolean,
     val features: Set<LightFeatures>,
+
+    /**
+     * Brightness in the range of 0..255, 0 if unsupported
+     */
     val brightness: Int,
-    val colorTemp: Int
+
+    /**
+     * Minimum supported color temperature in Mired unit, 0 if unsupported
+     */
+    val minColorTemp: Int = 0,
+
+    /**
+     * Maximum supported color temperature in Mired unit, 0 if unsupported
+     */
+    val maxColorTemp: Int = 0,
+
+    /**
+     * Color temperature in Mired unit in the range of [minColorTemp]..[maxColorTemp], 0 if unsupported
+     */
+    val colorTemp: Int = 0
+
 ) : HassControl {
 
     val brightnessPercent: Float
-        get() = brightness / 255f * 100
+        get() = brightness / MAX_BRIGHTNESS.toFloat() * 100
 
-    val colorTempPercent: Float
-        get() = colorTemp / 255f * 100
+    companion object {
+        const val MIN_BRIGHTNESS = 0
+        const val MAX_BRIGHTNESS = 255
+    }
 }
 
 enum class LightFeatures {

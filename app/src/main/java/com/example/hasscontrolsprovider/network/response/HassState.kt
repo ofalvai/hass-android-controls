@@ -20,7 +20,7 @@ data class HassState(
         fun notFoundState(id: String) = HassState(
             id,
             STATE_NOT_FOUND,
-            Attributes(null, null, null, null, null),
+            Attributes(null, null, null, null, null, null, null),
             null
         )
     }
@@ -31,6 +31,8 @@ data class HassState(
         val brightness: Int?,
         val supported_features: Int?,
         val color_temp: Int?,
+        val min_mireds: Int?,
+        val max_mireds: Int?,
         val battery_level: Float?
     )
 

@@ -27,7 +27,9 @@ private fun HassState.toLight(): HassLight {
         state = state == HassState.STATE_ON,
         features = parseSupportedLightFeatures(this),
         brightness = attributes.brightness ?: 0,
-        colorTemp = attributes.color_temp ?: 0
+        colorTemp = attributes.color_temp ?: 0,
+        minColorTemp = attributes.min_mireds ?: 0,
+        maxColorTemp = attributes.max_mireds ?: 0
     )
 }
 

@@ -23,6 +23,7 @@ import com.example.hasscontrolsprovider.entity.HassLight
 import com.example.hasscontrolsprovider.entity.LightFeatures
 import com.example.hasscontrolsprovider.ui.HassTheme
 import java.time.ZonedDateTime
+import kotlin.math.roundToInt
 
 @Composable
 fun Light(
@@ -42,19 +43,21 @@ fun Light(
         }
 
         if (controlState.features.contains(LightFeatures.BRIGHTNESS)) {
-            SliderControl(
+            LabeledSlider(
                 label = "Brightness",
                 iconRes = R.drawable.ic_brightness,
-                value = controlState.brightnessPercent,
+                value = controlState.brightness.toFloat(),
+                valueRange = HassLight.MIN_BRIGHTNESS..HassLight.MAX_BRIGHTNESS,
                 onValueChange = onBrightnessChange
             )
         }
 
         if (controlState.features.contains(LightFeatures.COLOR_TEMP)) {
-            SliderControl(
+            LabeledSlider(
                 label = "Color temperature",
                 iconRes = R.drawable.ic_color_temp,
-                value = controlState.colorTempPercent,
+                value = controlState.colorTemp.toFloat(),
+                valueRange = controlState.minColorTemp..controlState.maxColorTemp,
                 onValueChange = onColorTempChange
             )
         }
@@ -62,14 +65,16 @@ fun Light(
         Divider(color = Color.Gray)
         EntityAttribute(name = "State", value = if (controlState.state) "ON" else "OFF")
         EntityAttribute(name = "Brightness", value = "${controlState.brightnessPercent.toInt()}%")
+        EntityAttribute(name = "Color temperature", value = "${controlState.colorTemp} mireds")
     }
 }
 
 @Composable
-private fun SliderControl(
+private fun LabeledSlider(
     label: String,
     @DrawableRes iconRes: Int,
     value: Float,
+    valueRange: IntRange,
     onValueChange: (Float) -> Unit
 ) {
     Text(
@@ -82,7 +87,7 @@ private fun SliderControl(
             modifier = Modifier.padding(start = 16.dp),
             value = value,
             onValueChange = onValueChange,
-            valueRange = 0f..100f
+            valueRange = valueRange.first.toFloat()..valueRange.last.toFloat()
         )
     }
 }
@@ -99,7 +104,9 @@ private fun PreviewLightEntity() {
         status = "on",
         features = setOf(LightFeatures.BRIGHTNESS, LightFeatures.COLOR_TEMP),
         brightness = 50,
-        colorTemp = 0
+        colorTemp = 250,
+        minColorTemp = 153,
+        maxColorTemp = 370
     )
     val liveData = MutableLiveData(light)
 
@@ -107,8 +114,12 @@ private fun PreviewLightEntity() {
         Light(
             liveData,
             onToggle = { liveData.value = liveData.value!!.copy(state = it) },
-            onBrightnessChange = {  }, // TODO: brightness vs brightness percent
-            onColorTempChange = {}
+            onBrightnessChange = {
+                liveData.value = liveData.value!!.copy(brightness = it.roundToInt())
+            },
+            onColorTempChange = {
+                liveData.value = liveData.value!!.copy(colorTemp = it.roundToInt())
+            }
         )
     }
 }
