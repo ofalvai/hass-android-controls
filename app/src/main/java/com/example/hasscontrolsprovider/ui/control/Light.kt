@@ -1,11 +1,15 @@
 package com.example.hasscontrolsprovider.ui.control
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Slider
+import androidx.compose.material.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -94,7 +98,7 @@ private fun LabeledSlider(
 
 @Preview(widthDp = 300, showBackground = true)
 @Composable
-private fun PreviewLightControl() {
+fun PreviewLightControl() {
     val light = HassLight(
         entityId = "light.living_room",
         availability = Availability.AVAILABLE,

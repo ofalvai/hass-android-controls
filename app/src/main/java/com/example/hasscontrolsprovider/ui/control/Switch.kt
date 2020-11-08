@@ -37,7 +37,7 @@ fun SwitchControl(control: LiveData<HassSwitch>, onToggle: (Boolean) -> Unit) {
 
 @Preview(widthDp = 300, showBackground = true)
 @Composable
-private fun PreviewSwitchControl() {
+fun PreviewSwitchControl() {
     val switch = HassSwitch(
         entityId = "switch.zigbee2mqtt_permit_join",
         availability = Availability.AVAILABLE,

@@ -2,9 +2,9 @@ package com.example.hasscontrolsprovider.ui.control
 
 import android.text.format.DateUtils
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
