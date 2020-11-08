@@ -3,10 +3,10 @@ package com.example.hasscontrolsprovider.ui.control
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
 import androidx.compose.material.Switch
@@ -15,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
@@ -26,6 +25,8 @@ import com.example.hasscontrolsprovider.entity.Availability
 import com.example.hasscontrolsprovider.entity.HassLight
 import com.example.hasscontrolsprovider.entity.LightFeatures
 import com.example.hasscontrolsprovider.ui.HassTheme
+import com.example.hasscontrolsprovider.ui.iconDefaultColor
+import com.example.hasscontrolsprovider.ui.iconEnabledColor
 import java.time.ZonedDateTime
 import kotlin.math.roundToInt
 
@@ -38,11 +39,13 @@ fun LightControl(
 ) {
     val controlState by control.observeAsState(initialLightState)
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        EntityInfo(controlState) {
+    Control {
+        val iconColor = if (controlState.state) iconEnabledColor else iconDefaultColor
+        EntityInfo(controlState, iconColor) {
             Switch(
                 checked = controlState.state,
-                onCheckedChange = { onToggle(it) }
+                onCheckedChange = { onToggle(it) },
+                color = MaterialTheme.colors.primary
             )
         }
 
@@ -66,7 +69,7 @@ fun LightControl(
             )
         }
 
-        Divider(color = Color.Gray)
+        Spacer(modifier = Modifier.height(32.dp))
         EntityAttribute(name = "State", value = if (controlState.state) "ON" else "OFF")
         EntityAttribute(name = "Brightness", value = "${controlState.brightnessPercent.toInt()}%")
         EntityAttribute(name = "Color temperature", value = "${controlState.colorTemp} mireds")
@@ -83,10 +86,14 @@ private fun LabeledSlider(
 ) {
     Text(
         text = label,
-        style = MaterialTheme.typography.caption
+        style = MaterialTheme.typography.caption,
+        modifier = Modifier.padding(top = 16.dp)
     )
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(vectorResource(iconRes))
+        Icon(
+            asset = vectorResource(iconRes),
+            tint = iconDefaultColor
+        )
         Slider(
             modifier = Modifier.padding(start = 16.dp),
             value = value,
@@ -96,7 +103,7 @@ private fun LabeledSlider(
     }
 }
 
-@Preview(widthDp = 300, showBackground = true)
+@Preview(name = "Light")
 @Composable
 fun PreviewLightControl() {
     val light = HassLight(

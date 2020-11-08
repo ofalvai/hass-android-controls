@@ -1,14 +1,13 @@
 package com.example.hasscontrolsprovider.ui.control
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,20 +21,21 @@ import java.time.ZonedDateTime
 fun SwitchControl(control: LiveData<HassSwitch>, onToggle: (Boolean) -> Unit) {
     val controlState by control.observeAsState(initialSwitchState)
 
-    Column(modifier = Modifier.padding(16.dp)) {
+    Control {
         EntityInfo(controlState) {
             Switch(
                 checked = controlState.enabled,
-                onCheckedChange = onToggle
+                onCheckedChange = onToggle,
+                color = MaterialTheme.colors.primary
             )
         }
 
-        Divider(color = Color.Gray)
+        Spacer(modifier = Modifier.height(32.dp))
         EntityAttribute(name = "State", value = if (controlState.enabled) "ON" else "OFF")
     }
 }
 
-@Preview(widthDp = 300, showBackground = true)
+@Preview(name = "Switch")
 @Composable
 fun PreviewSwitchControl() {
     val switch = HassSwitch(
