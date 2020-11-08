@@ -1,21 +1,13 @@
 package com.example.hasscontrolsprovider.ui.control
 
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Slider
 import androidx.compose.material.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -73,33 +65,6 @@ fun LightControl(
         EntityAttribute(name = "State", value = if (controlState.state) "ON" else "OFF")
         EntityAttribute(name = "Brightness", value = "${controlState.brightnessPercent.toInt()}%")
         EntityAttribute(name = "Color temperature", value = "${controlState.colorTemp} mireds")
-    }
-}
-
-@Composable
-private fun LabeledSlider(
-    label: String,
-    @DrawableRes iconRes: Int,
-    value: Float,
-    valueRange: IntRange,
-    onValueChange: (Float) -> Unit
-) {
-    Text(
-        text = label,
-        style = MaterialTheme.typography.caption,
-        modifier = Modifier.padding(top = 16.dp)
-    )
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            asset = vectorResource(iconRes),
-            tint = iconDefaultColor
-        )
-        Slider(
-            modifier = Modifier.padding(start = 16.dp),
-            value = value,
-            onValueChange = onValueChange,
-            valueRange = valueRange.first.toFloat()..valueRange.last.toFloat()
-        )
     }
 }
 

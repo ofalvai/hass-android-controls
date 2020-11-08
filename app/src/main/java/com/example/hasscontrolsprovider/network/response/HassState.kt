@@ -16,24 +16,30 @@ data class HassState(
         const val STATE_OFF = "off"
         const val STATE_UNAVAILABLE = "unavailable"
         const val STATE_NOT_FOUND = "not_found" // Used for leftover UI controls
+        const val STATE_PLAYING = "playing"
+        const val STATE_PAUSED = "paused"
+        const val STATE_IDLE = "idle"
 
         fun notFoundState(id: String) = HassState(
             id,
             STATE_NOT_FOUND,
-            Attributes(null, null, null, null, null, null, null),
+            Attributes(),
             null
         )
     }
 
     @JsonClass(generateAdapter = true)
     data class Attributes(
-        val friendly_name: String?,
-        val brightness: Int?,
-        val supported_features: Int?,
-        val color_temp: Int?,
-        val min_mireds: Int?,
-        val max_mireds: Int?,
-        val battery_level: Float?
+        val friendly_name: String? = null,
+        val brightness: Int? = null,
+        val supported_features: Int? = null,
+        val color_temp: Int? = null,
+        val min_mireds: Int? = null,
+        val max_mireds: Int? = null,
+        val battery_level: Float? = null,
+        val volume_level: Float? = null,
+        val media_title: String? = null,
+        val media_artist: String? = null
     )
 
     val entityType: EntityType = entity_id.toEntityType()
@@ -45,7 +51,8 @@ enum class EntityType {
     LIGHT,
     SWITCH,
     VACUUM,
-    CAMERA
+    CAMERA,
+    MEDIA_PLAYER
 }
 
 object SupportedLightFeatureFlags {
@@ -65,6 +72,7 @@ private fun String.toEntityType(): EntityType {
         startsWith("camera.") -> EntityType.CAMERA
         startsWith("vacuum.") -> EntityType.VACUUM
         startsWith("switch.") -> EntityType.SWITCH
+        startsWith("media_player.") -> EntityType.MEDIA_PLAYER
         else -> EntityType.UNKNOWN
     }
 }

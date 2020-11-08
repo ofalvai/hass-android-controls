@@ -13,6 +13,7 @@ fun HassState.toHassControl(): HassControl {
         EntityType.SWITCH -> toSwitch()
         EntityType.CAMERA -> toCamera()
         EntityType.VACUUM -> toVacuum()
+        EntityType.MEDIA_PLAYER -> toMediaPlayer()
         else -> throw IllegalArgumentException("Unsupported entity type: $entityType")
     }
 }
@@ -66,6 +67,20 @@ private fun HassState.toVacuum(): HassVacuum {
     )
 }
 
+private fun HassState.toMediaPlayer(): HassMediaPlayer {
+    return HassMediaPlayer(
+        entityId = entity_id,
+        availability = parseAvailability(this),
+        name = attributes.friendly_name ?: entity_id,
+        status = state,
+        state = parseMediaPlayerState(this),
+        lastChanged = last_changed,
+        volumeLevel = attributes.volume_level ?: 0f,
+        mediaTitle = attributes.media_title.orEmpty(),
+        mediaArtist = attributes.media_artist.orEmpty()
+    )
+}
+
 private fun parseSupportedLightFeatures(hassState: HassState): Set<LightFeatures> {
     val featureInt = hassState.attributes.supported_features ?: return emptySet()
 
@@ -101,4 +116,11 @@ private fun parseAvailability(hassState: HassState) = when (hassState.state) {
     HassState.STATE_NOT_FOUND -> Availability.NOT_FOUND
     HassState.STATE_UNAVAILABLE -> Availability.UNAVAILABLE
     else -> Availability.AVAILABLE
+}
+
+private fun parseMediaPlayerState(hassState: HassState) = when (hassState.state) {
+    HassState.STATE_PLAYING -> HassMediaPlayer.State.PLAYING
+    HassState.STATE_PAUSED -> HassMediaPlayer.State.PAUSED
+    HassState.STATE_IDLE -> HassMediaPlayer.State.IDLE
+    else -> HassMediaPlayer.State.UNKNOWN
 }
