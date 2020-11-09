@@ -1,13 +1,22 @@
 package com.example.hasscontrolsprovider.ui.control
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Icon
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Slider
 import androidx.compose.material.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,6 +26,7 @@ import com.example.hasscontrolsprovider.entity.Availability
 import com.example.hasscontrolsprovider.entity.HassLight
 import com.example.hasscontrolsprovider.entity.LightFeatures
 import com.example.hasscontrolsprovider.ui.HassTheme
+import com.example.hasscontrolsprovider.ui.horizontalGradientBackground
 import com.example.hasscontrolsprovider.ui.iconDefaultColor
 import com.example.hasscontrolsprovider.ui.iconEnabledColor
 import java.time.ZonedDateTime
@@ -52,7 +62,7 @@ fun LightControl(
         }
 
         if (controlState.features.contains(LightFeatures.COLOR_TEMP)) {
-            LabeledSlider(
+            ColorTempSlider(
                 label = "Color temperature",
                 iconRes = R.drawable.ic_color_temp,
                 value = controlState.colorTemp.toFloat(),
@@ -65,6 +75,47 @@ fun LightControl(
         EntityAttribute(name = "State", value = if (controlState.state) "ON" else "OFF")
         EntityAttribute(name = "Brightness", value = "${controlState.brightnessPercent.toInt()}%")
         EntityAttribute(name = "Color temperature", value = "${controlState.colorTemp} mireds")
+    }
+}
+
+@Composable
+fun ColorTempSlider(
+    label: String,
+    @DrawableRes iconRes: Int,
+    value: Float,
+    valueRange: IntRange,
+    onValueChange: (Float) -> Unit
+) {
+    val gradientColors = remember {
+        listOf(
+            Color(166, 209, 255),
+            Color.White,
+            Color(255, 160, 0)
+        )
+    }
+
+    Text(
+        text = label,
+        style = MaterialTheme.typography.caption,
+        modifier = Modifier.padding(top = 16.dp)
+    )
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            asset = vectorResource(iconRes),
+            tint = iconDefaultColor
+        )
+        Box(Modifier
+            .padding(start = 16.dp, top = 8.dp, bottom = 8.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .horizontalGradientBackground(gradientColors)
+        ) {
+            // We need to wrap the Slider in a Box to apply a gradient background modifier
+            Slider(
+                value = value,
+                onValueChange = onValueChange,
+                valueRange = valueRange.first.toFloat()..valueRange.last.toFloat()
+            )
+        }
     }
 }
 
